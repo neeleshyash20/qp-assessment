@@ -1,0 +1,26 @@
+-- Table: public.order_items
+
+-- DROP TABLE IF EXISTS public.order_items;
+
+CREATE TABLE IF NOT EXISTS public.order_items
+(
+    id bigint NOT NULL DEFAULT nextval('order_items_id_seq'::regclass),
+    order_id bigint NOT NULL,
+    grocery_item_id bigint NOT NULL,
+    quantity integer NOT NULL,
+    price_per_unit numeric(10,2) NOT NULL,
+    CONSTRAINT order_items_pkey PRIMARY KEY (id),
+    CONSTRAINT order_items_grocery_item_id_fkey FOREIGN KEY (grocery_item_id)
+        REFERENCES public.grocery_items (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT order_items_order_id_fkey FOREIGN KEY (order_id)
+        REFERENCES public.orders (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.order_items
+    OWNER to postgres;
